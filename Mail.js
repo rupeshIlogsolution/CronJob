@@ -1,13 +1,13 @@
 const nodemailer = require('nodemailer');
 const { con } = require('./config');
 const sql = require('mssql');
-dotenv.config();
+require('dotenv').config();
 
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.MAIL,
+        user: process.env.FROM_MAIL_ID,
         pass: process.env.PASSWORD
     },
 });
@@ -32,7 +32,7 @@ async function getMailid() {
 
 async function sendMailFun() {
     let message = {
-        from: process.env.MAIL,
+        from: process.env.FROM_MAIL_ID,
         to: userMailIds,
         subject: "Mail test",
         text: "Hello world?",
@@ -43,7 +43,7 @@ async function sendMailFun() {
         }]
     }
 
-     await transporter.sendMail(message)
+    await transporter.sendMail(message)
 }
 
-module.exports = { getMailid,sendMailFun }
+module.exports = { getMailid, sendMailFun }
