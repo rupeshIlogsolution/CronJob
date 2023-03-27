@@ -32,7 +32,7 @@ async function getMailid() {
 
 async function sendMailFun() {
     let message = {
-        from: 'rupeshlkrmail@gmail.com',
+        from: process.env.MAIL,
         to: userMailIds,
         subject: "Mail test",
         text: "Hello world?",

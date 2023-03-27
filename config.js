@@ -1,4 +1,3 @@
-// const sql= require('mssql');
 const con= {
     user: 'Fins_admin',
     password:'#@)#n%^$4?#?$',
@@ -12,17 +11,3 @@ const con= {
 }
 
 module.exports={con}
-
-// const test= async () => {
-//     try {
-//         console.log('mls')
-//      await sql.connect(con)
-//      const result = await sql.query`SELECT type_of_issue,priority from IPERISCOPE.dbo.tbl_ticket tt `
-//      console.log('mlerfers')
-
-//      console.dir(result)
-//     } catch (err) {
-//         console.log(err)
-//     }
-//    }
-//    test()
