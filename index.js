@@ -1,10 +1,9 @@
 const cron = require('node-cron');
-const xlsx = require("json-as-xlsx");
-const {data, settings } = require('./Controller/Xlsxtojson');
+const {generateExcel } = require('./Xlsxtojson');
 
 
-cron.schedule('*/2 * * * * *', () => {
-    xlsx(data,settings)
+cron.schedule('*/3 * * * * *', () => {
+    generateExcel()
     console.log('running a task every minute');
 }, {
     scheduled: true,
