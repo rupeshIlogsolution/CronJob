@@ -1,39 +1,49 @@
 const nodemailer = require('nodemailer');
+const { con } = require('./config');
+const sql = require('mssql');
+dotenv.config();
 
 
-const mailsIds = ['rupeshlkr18@gmail.com', 'rupeshlkr93@gmail.com']
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.MAIL,
+        pass: process.env.PASSWORD
+    },
+});
 
-async function main(mailid) {
+let userMailIds = [];
 
-    console.log(mailid)
+async function getMailid() {
+    try {
+        await sql.connect(con)
+        const result = await sql.query`SELECT user_mail from Ube82.dbo.tbl_usermail`
+        if (result.recordset.length > 0) {
+            result.recordset.map(item => {
+                userMailIds.push(item.user_mail)
+            })
+        }
+    }
+    catch (err) {
+        console.log(err)
+        return 0
+    }
+}
 
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'rupeshlkrmail@gmail.com', // generated ethereal user
-            pass: 'uuuugzjvvxrfqpdi', // generated ethereal password
-        },
-    });
-
-
+async function sendMailFun() {
     let message = {
-        from: 'rupeshlkrmail@gmail.com', // sender address
-        to: mailid, // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "Done SuccessFUlly again", // html body
-        attachments:[{
-            filename:'ExcelData.xlsx',
-            path:'./ExcelData.xlsx'
+        from: 'rupeshlkrmail@gmail.com',
+        to: userMailIds,
+        subject: "Mail test",
+        text: "Hello world?",
+        html: "Done Mail sent",
+        attachments: [{
+            filename: 'ExcelData.xlsx',
+            path: './ExcelData.xlsx'
         }]
     }
 
-
-   const sensMail= await transporter.sendMail(message)
-   console.log(sensMail)
+     await transporter.sendMail(message)
 }
 
-mailsIds.map(item => {
-
-    main(item)
-})
+module.exports = { getMailid,sendMailFun }
